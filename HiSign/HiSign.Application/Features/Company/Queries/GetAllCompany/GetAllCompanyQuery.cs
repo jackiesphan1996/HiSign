@@ -14,6 +14,10 @@ namespace Hisign.Application.Features.Company.Queries.GetAllCompany
         public string Name { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string TaxCode { get; set; }
+        public string BankAccount { get; set; }
+        public string BusinessLicense { get; set; }
     }
     public class GetAllCompanyQuery : IRequest<Response<List<CompanyViewModel>>>
     {
@@ -36,7 +40,11 @@ namespace Hisign.Application.Features.Company.Queries.GetAllCompany
                 Id = x.Id,
                 Name = x.Name,
                 Address = x.Address,
-                PhoneNumber = x.PhoneNumber
+                PhoneNumber = x.PhoneNumber,
+                TaxCode = x.TaxCode,
+                BankAccount = x.BankAccount,
+                BusinessLicense = x.BusinessLicense,
+                Email = x.Email
             }).ToList();
 
             return new Response<List<CompanyViewModel>>(res);

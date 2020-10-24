@@ -1,13 +1,8 @@
 ﻿using HiSign.Application.Enums;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Crypto.Prng.Drbg;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HiSign.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HiSign.Infrastructure.Identity.Seeds
 {

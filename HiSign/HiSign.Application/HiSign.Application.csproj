@@ -20,7 +20,6 @@
     <ProjectReference Include="..\HiSign.Domain\HiSign.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\Company\Commands\CreateCompany\" />
     <Folder Include="Mappings\" />
   </ItemGroup>
 
