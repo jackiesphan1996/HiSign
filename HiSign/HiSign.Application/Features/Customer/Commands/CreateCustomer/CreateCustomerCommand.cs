@@ -40,7 +40,7 @@ namespace HiSign.Application.Features.Customer.Commands.CreateCustomer
             
             if (request.CompanyId.HasValue)
             {
-                var company = await _companyRepository.GetByIdAsync(customer.CompanyId.Value);
+                var company = await _companyRepository.GetByIdAsync(currentUserLogin.CompanyId.Value);
                 customer = new Domain.Entities.Customer
                 {
                     CompanyId = company.Id,
