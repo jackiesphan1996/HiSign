@@ -14,12 +14,10 @@ namespace HiSign.Infrastructure.Persistence.Contexts
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         private readonly IDateTimeService _dateTime;
-        private readonly IAuthenticatedUserService _authenticatedUser;
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IDateTimeService dateTime, IAuthenticatedUserService authenticatedUser) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IDateTimeService dateTime) : base(options)
         {
             _dateTime = dateTime;
-            _authenticatedUser = authenticatedUser;
         }
 
         public DbSet<Company> Companies { get; set; }
@@ -34,11 +32,9 @@ namespace HiSign.Infrastructure.Persistence.Contexts
                 {
                     case EntityState.Added:
                         entry.Entity.Created = _dateTime.NowUtc;
-                        entry.Entity.CreatedBy = _authenticatedUser.UserId;
                         break;
                     case EntityState.Modified:
                         entry.Entity.LastModified = _dateTime.NowUtc;
-                        entry.Entity.LastModifiedBy = _authenticatedUser.UserId;
                         break;
                 }
             }

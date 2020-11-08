@@ -1,9 +1,8 @@
 ﻿using HiSign.Domain.Common;
-using System.Collections.Generic;
 
 namespace HiSign.Domain.Entities
 {
-    public class Company : AuditableBaseEntity
+    public class Customer : BaseEntity
     {
         public string Name { get; set; }
         public string Address { get; set; }
@@ -12,9 +11,8 @@ namespace HiSign.Domain.Entities
         public string TaxCode { get; set; }
         public string BankAccount { get; set; }
         public string BusinessLicense { get; set; }
-        public virtual ICollection<ContractType> ContractTypes { get; set; }
-        public virtual ICollection<Contract> Contracts { get; set; }
-        public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }
-        public virtual ICollection<Customer> Customers { get; set; }
+        public int? CompanyId { get; set; }
+        public int BelongToCompanyId { get; set; }
+        public virtual Company BelongToCompany { get; set; }
     }
 }
