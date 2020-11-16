@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using HiSign.Application.Exceptions;
 using HiSign.Application.Interfaces;
 using HiSign.Application.Interfaces.Repositories;
 using HiSign.Application.Wrappers;
@@ -40,7 +41,25 @@ namespace HiSign.Application.Features.Customer.Commands.CreateCustomer
             
             if (request.CompanyId.HasValue)
             {
-                var company = await _companyRepository.GetByIdAsync(currentUserLogin.CompanyId.Value);
+                if (request.CompanyId.Value == currentUserLogin.CompanyId)
+                {
+                    throw new ApiException("Can not add your company to customer list");
+                }
+
+                var company = await _companyRepository.GetByIdAsync(request.CompanyId.Value);
+
+                if (company is null)
+                {
+                    throw new ApiException("Company ID does not exist.");
+                }
+
+                bool isExist = await _customerRepository.Exist(currentUserLogin.CompanyId.Value, company.Id);
+
+                if (isExist)
+                {
+                    throw new ApiException($"{company.Name} already added to customer list.");
+                }
+
                 customer = new Domain.Entities.Customer
                 {
                     CompanyId = company.Id,

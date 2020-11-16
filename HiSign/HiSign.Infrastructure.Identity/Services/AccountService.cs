@@ -92,14 +92,16 @@ namespace HiSign.Infrastructure.Identity.Services
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail == null)
             {
+                user.EmailConfirmed = true;
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, Roles.CompanyAdmin.ToString());
-                    var verificationUri = await SendVerificationEmail(user, origin);
+                    //var verificationUri = await SendVerificationEmail(user, origin);
                     //TODO: Attach Email Service here and configure it via appsettings
-                    await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "mail@codewithmukesh.com", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
-                    return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
+                    //await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "mail@codewithmukesh.com", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
+                    //return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
+                    return new Response<string>(user.Id);
                 }
                 else
                 {

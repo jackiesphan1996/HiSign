@@ -1,4 +1,5 @@
-﻿using HiSign.Domain.Entities;
+﻿using System.Threading.Tasks;
+using HiSign.Domain.Entities;
 
 namespace HiSign.Application.Interfaces.Repositories
 {
