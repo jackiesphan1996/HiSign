@@ -21,6 +21,7 @@ namespace HiSign.Infrastructure.Persistence
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddTransient<ICompanyRepository, CompanyRepository>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
+            services.AddTransient<IContractTypeRepository, ContractTypeRepository>();
 
             #endregion
         }

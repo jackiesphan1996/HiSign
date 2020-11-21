@@ -19,6 +19,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using HiSign.Domain.Entities;
+using HiSign.Infrastructure.Persistence.Contexts;
 
 namespace HiSign.Infrastructure.Identity.Services
 {
@@ -30,12 +31,14 @@ namespace HiSign.Infrastructure.Identity.Services
         private readonly IEmailService _emailService;
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
+        private readonly ApplicationDbContext _applicationDbContext;
         public AccountService(UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
             IDateTimeService dateTimeService,
             SignInManager<ApplicationUser> signInManager,
-            IEmailService emailService)
+            IEmailService emailService,
+            ApplicationDbContext applicationDbContext)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -43,6 +46,7 @@ namespace HiSign.Infrastructure.Identity.Services
             _dateTimeService = dateTimeService;
             _signInManager = signInManager;
             this._emailService = emailService;
+            _applicationDbContext = applicationDbContext;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -82,6 +86,19 @@ namespace HiSign.Infrastructure.Identity.Services
             {
                 throw new ApiException($"Username '{request.UserName}' is already taken.");
             }
+
+            var company = new HiSign.Domain.Entities.Company
+            {
+                Name = request.CompanyName,
+                Address = request.Address,
+                PhoneNumber = request.PhoneNumber,
+                BankAccount = request.BankAccount,
+                BusinessLicense = request.BusinessLicense,
+                Email = request.Email,
+                TaxCode = request.TaxCode,
+                Created = DateTime.Now
+            };
+
             var user = new ApplicationUser
             {
                 Email = request.Email,
@@ -96,6 +113,13 @@ namespace HiSign.Infrastructure.Identity.Services
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
+                    await _applicationDbContext.Companies.AddAsync(company);
+                    await _applicationDbContext.SaveChangesAsync();
+
+                    user.CompanyId = company.Id;
+
+                    await _userManager.UpdateAsync(user);
+
                     await _userManager.AddToRoleAsync(user, Roles.CompanyAdmin.ToString());
                     //var verificationUri = await SendVerificationEmail(user, origin);
                     //TODO: Attach Email Service here and configure it via appsettings

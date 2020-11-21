@@ -25,6 +25,7 @@
   </ItemGroup>
 <ItemGroup>
   <ProjectReference Include="..\HiSign.Application\HiSign.Application.csproj" />
+  <ProjectReference Include="..\HiSign.Infrastructure.Persistence\HiSign.Infrastructure.Persistence.csproj" />
 </ItemGroup>
 <ItemGroup>
   <Folder Include="Contexts\" />
