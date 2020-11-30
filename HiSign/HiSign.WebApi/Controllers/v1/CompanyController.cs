@@ -46,7 +46,7 @@ namespace HiSign.WebApi.Controllers.v1
 
         [HttpPut]
         [Authorize("CEO,CompanyAdmin,Secretary")]
-        [Route("{id}")]
+        [Route("info")]
         public async Task<IActionResult> GetInfo([FromQuery] GetCompanyinfoQuery query)
         {
             return Ok(await _mediator.Send(query));
