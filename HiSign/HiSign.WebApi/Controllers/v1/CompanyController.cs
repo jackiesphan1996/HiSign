@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Hisign.Application.Features.Company.Commands.CreateCompany;
+using HiSign.Application.Features.Company.Commands.UpdateCompanyByCompany;
 using Hisign.Application.Features.Company.Queries.GetAllCompany;
+using HiSign.Application.Features.Company.Queries.GetCompanyInfo;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +33,23 @@ namespace HiSign.WebApi.Controllers.v1
         public async Task<IActionResult> Post(CreateCompanyCommand command)
         {
             return Ok(await _mediator.Send(command));
+        }
+
+        [HttpPut]
+        [Authorize("CEO,CompanyAdmin")]
+        [Route("{id}")]
+        public async Task<IActionResult> PutCompany([FromRoute]int id, UpdateCompanyByCompanyCommand command)
+        {
+            command.Id = id;
+            return Ok(await _mediator.Send(command));
+        }
+
+        [HttpPut]
+        [Authorize("CEO,CompanyAdmin,Secretary")]
+        [Route("{id}")]
+        public async Task<IActionResult> GetInfo([FromQuery] GetCompanyinfoQuery query)
+        {
+            return Ok(await _mediator.Send(query));
         }
     }
 }
