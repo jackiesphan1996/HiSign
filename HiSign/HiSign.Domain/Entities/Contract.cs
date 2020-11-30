@@ -9,22 +9,23 @@ namespace HiSign.Domain.Entities
         public int ContractTypeId { get; set; }
         public ContractType ContractType { get; set; }
         public int CompanyId { get; set; }
-        public int CustomerCompanyId { get; set; }
+        public int CustomerId { get; set; }
         public decimal TotalValue { get; set; }
         public DateTime? ExpiredDate { get; set; }
         public ContractStatus Status { get; set; }
+        public Customer Customer { get; set; }
         public Company Company { get; set; }
+        public string Content { get; set; }
+        public string ContractPlace { get; set; }
+        public string Title { get; set; }
+        public string Name { get; set; }
+        public string ContractNum { get; set; }
     }
 
     public enum ContractStatus
     {
-        [Description("Status là AAAA")]
-        AAAA = 0,
-        [Description("Status là BBBB")]
-        BBBB = 1,
-        [Description("Status là CCCC")]
-        CCCC = 2,
-        [Description("Status là DDDD")]
-        DDDD = 3
+        Draft = 0,
+        Open = 1,
+        Completed = 2
     }
 }
