@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HiSign.Application.Interfaces;
 using HiSign.Application.Interfaces.Repositories;
 using HiSign.Application.Wrappers;
+using HiSign.Domain.Entities;
 using MediatR;
 
 namespace HiSign.Application.Features.Contract.Queries.GetAllContracts
@@ -23,7 +24,8 @@ namespace HiSign.Application.Features.Contract.Queries.GetAllContracts
         public int ContractTypeId { get; set; }
         public int CustomerId { get; set; }
         public CustomerViewModel Customer { get; set; }
-
+        public ContractStatus Status { get; set; }
+        public string StatusAsString => Status.ToString();
     }
 
     public class CustomerViewModel
@@ -71,7 +73,8 @@ namespace HiSign.Application.Features.Contract.Queries.GetAllContracts
                 {
                     Id = x.CustomerId,
                     CompanyName = x.Customer.Name
-                }
+                },
+                Status = x.Status
             }).ToList();
 
             return new Response<List<GetAllContractsViewModel>>(result);
