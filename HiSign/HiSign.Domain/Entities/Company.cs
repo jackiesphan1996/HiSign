@@ -12,6 +12,7 @@ namespace HiSign.Domain.Entities
         public string TaxCode { get; set; }
         public string BankAccount { get; set; }
         public string BusinessLicense { get; set; }
+        public string Representaive { get; set; }
         public virtual ICollection<ContractType> ContractTypes { get; set; }
         public virtual ICollection<Contract> Contracts { get; set; }
         public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }

@@ -16,6 +16,7 @@ namespace Hisign.Application.Features.Company.Commands.CreateCompany
         public string TaxCode { get; set; }
         public string BankAccount { get; set; }
         public string BusinessLicense { get; set; }
+        public string Representaive { get; set; }
     }
 
     public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand, Response<bool>>
@@ -36,7 +37,8 @@ namespace Hisign.Application.Features.Company.Commands.CreateCompany
                 BusinessLicense = request.BusinessLicense,
                 Email = request.Email,
                 TaxCode = request.TaxCode,
-                Created = DateTime.Now
+                Created = DateTime.Now,
+                Representaive = request.Representaive
             };
 
             await _companyRepository.AddAsync(company);

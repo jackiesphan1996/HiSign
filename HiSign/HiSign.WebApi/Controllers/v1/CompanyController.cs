@@ -36,7 +36,7 @@ namespace HiSign.WebApi.Controllers.v1
         }
 
         [HttpPut]
-        [Authorize("CEO,CompanyAdmin")]
+        [Authorize(Roles = "CEO,CompanyAdmin")]
         [Route("{id}")]
         public async Task<IActionResult> PutCompany([FromRoute]int id, UpdateCompanyByCompanyCommand command)
         {
@@ -45,7 +45,7 @@ namespace HiSign.WebApi.Controllers.v1
         }
 
         [HttpPut]
-        [Authorize("CEO,CompanyAdmin,Secretary")]
+        [Authorize(Roles = "CEO,CompanyAdmin,Secretary")]
         [Route("info")]
         public async Task<IActionResult> GetInfo([FromQuery] GetCompanyinfoQuery query)
         {

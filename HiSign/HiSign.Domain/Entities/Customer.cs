@@ -1,6 +1,5 @@
-﻿using System.Collections;
+﻿using HiSign.Domain.Common;
 using System.Collections.Generic;
-using HiSign.Domain.Common;
 
 namespace HiSign.Domain.Entities
 {
@@ -15,6 +14,7 @@ namespace HiSign.Domain.Entities
         public string BusinessLicense { get; set; }
         public int? CompanyId { get; set; }
         public int BelongToCompanyId { get; set; }
+        public string Representaive { get; set; }
         public virtual Company BelongToCompany { get; set; }
         public virtual ICollection<Contract> Contracts { get; set; }
     }

@@ -18,6 +18,7 @@ namespace HiSign.Application.Features.Customer.Commands.CreateCustomer
         public string BankAccount { get; set; }
         public string BusinessLicense { get; set; }
         public int? CompanyId { get; set; }
+        public string Representaive { get; set; }
     }
 
     public class CreateCustomerCommandHanlder : IRequestHandler<CreateCustomerCommand, Response<int>>
@@ -70,7 +71,8 @@ namespace HiSign.Application.Features.Customer.Commands.CreateCustomer
                     Email = company.Email,
                     Name = company.Name,
                     PhoneNumber = company.PhoneNumber,
-                    TaxCode = company.TaxCode
+                    TaxCode = company.TaxCode,
+                    Representaive = company.Representaive
                 };
             }
             else
@@ -84,7 +86,8 @@ namespace HiSign.Application.Features.Customer.Commands.CreateCustomer
                     Email = request.Email,
                     Name = request.Name,
                     PhoneNumber = request.PhoneNumber,
-                    TaxCode = request.TaxCode
+                    TaxCode = request.TaxCode,
+                    Representaive = request.Representaive
                 };
             }
 

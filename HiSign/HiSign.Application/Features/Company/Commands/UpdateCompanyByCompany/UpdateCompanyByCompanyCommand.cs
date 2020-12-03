@@ -18,6 +18,7 @@ namespace HiSign.Application.Features.Company.Commands.UpdateCompanyByCompany
         public string TaxCode { get; set; }
         public string BankAccount { get; set; }
         public string BusinessLicense { get; set; }
+        public string Representaive { get; set; }
     }
 
     public class UpdateCompanyByCompanyCommandHandler : IRequestHandler<UpdateCompanyByCompanyCommand, Response<bool>>
@@ -51,8 +52,9 @@ namespace HiSign.Application.Features.Company.Commands.UpdateCompanyByCompany
             company.PhoneNumber = request.PhoneNumber;
             company.Email = request.Email;
             company.TaxCode = request.TaxCode;
-            request.BankAccount = request.BankAccount;
-            request.BusinessLicense = request.BusinessLicense;
+            company.BankAccount = request.BankAccount;
+            company.BusinessLicense = request.BusinessLicense;
+            company.Representaive = request.Representaive;
 
             await _companyRepository.UpdateAsync(company);
 

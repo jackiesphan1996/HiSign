@@ -11,7 +11,7 @@ namespace HiSign.Application.Features.Customer.Queries.GetAllCustomers
 {
     public class GetAllCustomerViewModel
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
@@ -46,6 +46,7 @@ namespace HiSign.Application.Features.Customer.Queries.GetAllCustomers
 
             var result = customers.Select(x => new GetAllCustomerViewModel
             {
+                Id = x.Id,
                 CompanyId = x.CompanyId,
                 BankAccount = x.BankAccount,
                 Address = x.Address,
