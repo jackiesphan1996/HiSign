@@ -261,6 +261,10 @@ namespace HiSign.Infrastructure.Identity.Services
 
         public async Task<Response<string>> RegisterAsync(int companyId, RegisterEmployeeRequest request)
         {
+            if (request.Role == Roles.SuperAdmin)
+            {
+                throw new ApiException("Role SuperAdmin can be added to this user.");
+            }
             var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
             if (userWithSameUserName != null)
             {
