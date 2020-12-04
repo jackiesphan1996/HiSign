@@ -1,9 +1,6 @@
-﻿using HiSign.Application.DTOs.Account;
+﻿using System.Collections.Generic;
+using HiSign.Application.DTOs.Account;
 using HiSign.Application.Wrappers;
-using Microsoft.Extensions.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HiSign.Application.Interfaces
@@ -15,5 +12,8 @@ namespace HiSign.Application.Interfaces
         Task<Response<string>> ConfirmEmailAsync(string userId, string code);
         Task ForgotPassword(ForgotPasswordRequest model, string origin);
         Task<Response<string>> ResetPassword(ResetPasswordRequest model);
+        Task<Response<string>> RegisterAsync(int companyId, RegisterEmployeeRequest request);
+        Task<Response<List<EmployeeResponse>>> GetAllEmployeeAsync(int companyId);
+        Task<Response<bool>> UpdateEmployeeAsync(UpdateEmployeeRequest request);
     }
 }

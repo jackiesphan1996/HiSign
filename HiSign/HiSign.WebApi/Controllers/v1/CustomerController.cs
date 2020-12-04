@@ -2,6 +2,7 @@
 using Hisign.Application.Features.Company.Commands.CreateCompany;
 using Hisign.Application.Features.Company.Queries.GetAllCompany;
 using HiSign.Application.Features.Customer.Commands.CreateCustomer;
+using HiSign.Application.Features.Customer.Commands.UpdateCusstomer;
 using HiSign.Application.Features.Customer.Queries.GetAllCustomers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -31,6 +32,15 @@ namespace HiSign.WebApi.Controllers.v1
         [Authorize(Roles = "CompanyAdmin,CEO")]
         public async Task<IActionResult> Post(CreateCustomerCommand command)
         {
+            return Ok(await _mediator.Send(command));
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "CompanyAdmin,CEO")]
+        [Route("{id}")]
+        public async Task<IActionResult> Put([FromRoute] int id, UpdateCustomerCommand command)
+        {
+            command.Id = id;
             return Ok(await _mediator.Send(command));
         }
     }

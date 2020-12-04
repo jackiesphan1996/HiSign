@@ -14,12 +14,14 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using HiSign.Domain.Entities;
 using HiSign.Infrastructure.Persistence.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace HiSign.Infrastructure.Identity.Services
 {
@@ -255,6 +257,93 @@ namespace HiSign.Infrastructure.Identity.Services
             {
                 throw new ApiException($"Error occured while reseting the password.");
             }
+        }
+
+        public async Task<Response<string>> RegisterAsync(int companyId, RegisterEmployeeRequest request)
+        {
+            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
+            if (userWithSameUserName != null)
+            {
+                throw new ApiException($"Username '{request.UserName}' is already taken.");
+            }
+
+            var user = new ApplicationUser
+            {
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                UserName = request.UserName,
+                CompanyId =  companyId
+            };
+            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
+            if (userWithSameEmail == null)
+            {
+                user.EmailConfirmed = true;
+                var result = await _userManager.CreateAsync(user, request.Password);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, request.Role.ToString());
+                    //var verificationUri = await SendVerificationEmail(user, origin);
+                    //TODO: Attach Email Service here and configure it via appsettings
+                    //await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "mail@codewithmukesh.com", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
+                    //return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
+                    return new Response<string>(user.Id);
+                }
+                else
+                {
+                    throw new ApiException($"{result.Errors}");
+                }
+            }
+            else
+            {
+                throw new ApiException($"Email {request.Email } is already registered.");
+            }
+        }
+
+        public async Task<Response<List<EmployeeResponse>>> GetAllEmployeeAsync(int companyId)
+        {
+            var employees = await _applicationDbContext.Set<ApplicationUser>().Where(x => x.CompanyId == companyId)
+                .ToListAsync();
+
+            var res = new List<EmployeeResponse>();
+
+            foreach (var employee in employees)
+            {
+                var employeeDetail = new EmployeeResponse
+                {
+                    UserName = employee.UserName,
+                    Id = employee.Id,
+                    FirstName = employee.FirstName,
+                    LastName = employee.LastName,
+                    Email = employee.Email
+                };
+
+                employeeDetail.Roles = await _userManager.GetRolesAsync(employee);
+
+                res.Add(employeeDetail);
+            }
+
+            return new Response<List<EmployeeResponse>>(res);
+        }
+
+        public async Task<Response<bool>> UpdateEmployeeAsync(UpdateEmployeeRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(request.Id);
+
+            if (user is null)
+            {
+                throw new ApiException("User does not exist.");
+            }
+
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.PhoneNumber = request.PhoneNumber;
+            user.DateOfBirth = request.DateOfBirth;
+            user.Email = request.Email;
+
+            await _userManager.UpdateAsync(user);
+
+            return new Response<bool>(true);
         }
     }
 

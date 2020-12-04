@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using HiSign.Application.Features.ContractType.Commands.UpdateContractType;
 
 namespace HiSign.WebApi.Controllers.v1
 {
@@ -30,6 +31,15 @@ namespace HiSign.WebApi.Controllers.v1
         [Authorize(Roles = "CompanyAdmin,CEO")]
         public async Task<IActionResult> Post(CreateContractTypeCommand command)
         {
+            return Ok(await _mediator.Send(command));
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "CompanyAdmin,CEO")]
+        [Route("{id}")]
+        public async Task<IActionResult> Pust([FromRoute] int id, UpdateContractTypeCommand command)
+        {
+            command.Id = id;
             return Ok(await _mediator.Send(command));
         }
     }

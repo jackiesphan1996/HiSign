@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HiSign.Application.DTOs.Account
+﻿namespace HiSign.Application.DTOs.Account
 {
     public class AuthenticationRequest
     {
