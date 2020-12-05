@@ -1,6 +1,5 @@
-﻿using System;
-using System.ComponentModel;
-using HiSign.Domain.Common;
+﻿using HiSign.Domain.Common;
+using System;
 
 namespace HiSign.Domain.Entities
 {
@@ -20,6 +19,7 @@ namespace HiSign.Domain.Entities
         public string Title { get; set; }
         public string Name { get; set; }
         public string ContractNum { get; set; }
+        public string FileUrl { get; set; }
     }
 
     public enum ContractStatus

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using HiSign.Application;
 using HiSign.Application.Interfaces;
@@ -20,8 +21,10 @@ using HiSign.WebApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace HiSign.WebApi
 {
@@ -43,6 +46,18 @@ namespace HiSign.WebApi
             services.AddApiVersioningExtension();
             services.AddHealthChecks();
             services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
+
+            var blobStorageConnectionString = new BlobStorageConnectionString
+            {
+                ConnectionString = _config["AzureBlob:ConnectionString"]
+            };
+
+
+            _config.Bind(nameof(blobStorageConnectionString), blobStorageConnectionString);
+            services.AddSingleton(blobStorageConnectionString);
+
+            services.AddScoped<AzureBlobHelper, AzureBlobHelper>();
+            services.AddScoped<AzureBlobSavingService, AzureBlobSavingService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -72,6 +87,8 @@ namespace HiSign.WebApi
 
         
     }
+
+    
 
     public static class CustomExtensions
     {

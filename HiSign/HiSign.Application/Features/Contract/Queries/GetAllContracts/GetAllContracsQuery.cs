@@ -26,6 +26,7 @@ namespace HiSign.Application.Features.Contract.Queries.GetAllContracts
         public CustomerViewModel Customer { get; set; }
         public ContractStatus Status { get; set; }
         public string StatusAsString => Status.ToString();
+        public string FileUrl { get; set; }
     }
 
     public class CustomerViewModel
@@ -74,7 +75,8 @@ namespace HiSign.Application.Features.Contract.Queries.GetAllContracts
                     Id = x.CustomerId,
                     CompanyName = x.Customer.Name
                 },
-                Status = x.Status
+                Status = x.Status,
+                FileUrl = x.FileUrl
             }).ToList();
 
             return new Response<List<GetAllContractsViewModel>>(result);
