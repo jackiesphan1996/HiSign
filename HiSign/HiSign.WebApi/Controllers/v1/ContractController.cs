@@ -4,14 +4,13 @@ using HiSign.Application.Features.Contract.Queries.GetAllContracts;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Syncfusion.DocIO;
-using Syncfusion.DocIO.DLS;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using HiSign.Application.Exceptions;
 using HiSign.Infrastructure.Persistence.Contexts;
 using HiSign.WebApi.Services;
+using MariGold.OpenXHTML;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -69,18 +68,13 @@ namespace HiSign.WebApi.Controllers.v1
                 throw new ApiException($"Contract with ID {id} does not exist.");
             }
 
-            using (WordDocument document = new WordDocument())
+            using (MemoryStream mem = new MemoryStream())
             {
-                //Adds a section and a paragraph to the document
-                document.EnsureMinimal();
-                //Appends text to the last paragraph of the document
-                document.LastParagraph.AppendText(contract.Content);
-                MemoryStream stream = new MemoryStream();
-                //Saves the Word document to  MemoryStream
-                document.Save(stream, FormatType.Docx);
-                stream.Position = 0;
-                //Download Word document in the browser
-                return File(stream, "application/msword", $"{contract.Name}_{contract.Name}.docx");
+                WordDocument doc = new WordDocument(mem);
+                doc.Process(new HtmlParser(contract.Content));
+                doc.Save();
+
+                return File(mem.ToArray(), "application/msword", $"{contract.Name}_{contract.Name}.docx");
             }
         }
 
