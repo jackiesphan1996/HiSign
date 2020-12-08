@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using GemBox.Document;
 using HiSign.Application.Exceptions;
 using HiSign.Infrastructure.Persistence.Contexts;
 using HiSign.WebApi.Services;
@@ -107,11 +109,65 @@ namespace HiSign.WebApi.Controllers.v1
             uploadFileName = await _azureBlobSavingService.SavingFileToAzureBlobAsync(data, fileName, contenType, blobContainer);
             var url = $"{_configuration["AzureBlob:ServerImage"]}/{container}/{uploadFileName}";
 
-            contract.FileUrl = uploadFileName;
+            contract.FileUrl = url;
 
             _dbContext.SaveChanges();
 
             return Ok(url);
         }
+
+        [HttpPut]
+        [AllowAnonymous]
+        [Route("{id}/sign")]
+        public async Task<IActionResult> Sign([FromRoute] int id, [FromBody] SignData model)
+        {
+            var contract = _dbContext.Contracts.SingleOrDefault(x => x.Id == id);
+
+            X509Certificate2 clientCertificate = new X509Certificate2(model.RawData);
+
+            ComponentInfo.SetLicense("FREE-LIMITED-KEY");
+
+
+            var document = DocumentModel.Load(contract.FileUrl);
+
+            // Create visual representation of digital signature
+            var options = new DocxSaveOptions()
+            {
+                DigitalSignatures =
+                {
+                    new DocxDigitalSignatureSaveOptions
+                    {
+                        Certificate = clientCertificate
+                    }
+                }
+            };
+
+
+            var fileName = $"{contract.Title}_{DateTime.Now.ToString("dd-MM-yyyy HH:mm")}.docx";
+
+            var container = "";
+
+            container = "contracts";
+            var blobContainer = await _azureBlobHelper.GetBlobContainer(container);
+
+            using (var stream = new MemoryStream())
+            {
+                document.Save(stream, options);
+
+                var uploadFileName = await _azureBlobSavingService.SavingFileToAzureBlobAsync(stream.ToArray(), fileName, options.ContentType, blobContainer);
+                var url = $"{_configuration["AzureBlob:ServerImage"]}/{container}/{uploadFileName}";
+
+                contract.FileUrl = url;
+
+                _dbContext.SaveChanges();
+            }
+
+            return Ok();
+        }
+    }
+
+    public class SignData
+    {
+        public string RawData { get; set; }
     }
 }
