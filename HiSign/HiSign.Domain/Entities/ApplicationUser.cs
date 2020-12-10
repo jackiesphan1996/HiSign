@@ -12,6 +12,7 @@ namespace HiSign.Domain.Entities
         public Company Company { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; }
+        public virtual ICollection<UserPermission> UserPermissions { get; set; }
         public bool OwnsToken(string token)
         {
             return this.RefreshTokens?.Find(x => x.Token == token) != null;

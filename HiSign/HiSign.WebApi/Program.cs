@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http.Extensions;
 using Serilog;
 using HiSign.Infrastructure.Identity;
+using HiSign.Infrastructure.Persistence.Contexts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -38,10 +39,12 @@ namespace HiSign.WebApi
                 {
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                    var dbContext = services.GetRequiredService<ApplicationDbContext>();
 
                     await Infrastructure.Identity.Seeds.DefaultRoles.SeedAsync(userManager, roleManager);
                     await Infrastructure.Identity.Seeds.DefaultSuperAdmin.SeedAsync(userManager, roleManager);
                     await Infrastructure.Identity.Seeds.DefaultBasicUser.SeedAsync(userManager, roleManager);
+                    await Infrastructure.Identity.Seeds.PermissionSeed.SeedAsync(dbContext);
                     Log.Information("Finished Seeding Default Data");
                     Log.Information("Application Starting");
                 }
