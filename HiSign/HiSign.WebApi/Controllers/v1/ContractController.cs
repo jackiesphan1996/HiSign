@@ -10,10 +10,13 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using GemBox.Document;
 using HiSign.Application.Exceptions;
+using HiSign.Domain.Entities;
 using HiSign.Infrastructure.Persistence.Contexts;
 using HiSign.WebApi.Services;
 using MariGold.OpenXHTML;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -29,19 +32,22 @@ namespace HiSign.WebApi.Controllers.v1
         private readonly AzureBlobHelper _azureBlobHelper;
         private readonly AzureBlobSavingService _azureBlobSavingService;
         private readonly IConfiguration _configuration;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public ContractController(
             IMediator mediator , 
             ApplicationDbContext dbContext,
             AzureBlobHelper azureBlobHelper,
             AzureBlobSavingService azureBlobSavingService,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            UserManager<ApplicationUser> userManager)
         {
             _mediator = mediator;
             _dbContext = dbContext;
             _azureBlobHelper = azureBlobHelper;
             _azureBlobSavingService = azureBlobSavingService;
             _configuration = configuration;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -163,6 +169,23 @@ namespace HiSign.WebApi.Controllers.v1
             }
 
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("a-side-info")]
+        public async Task<IActionResult> GetCreationContractInfo(int id)
+        {
+            var contract = await _dbContext.Contracts.SingleOrDefaultAsync(x => x.Id == id);
+
+            if (contract is null)
+            {
+                throw new ApiException("Contract does not exist");
+            }
+
+            return Ok(new
+            {
+                companyId = contract.CompanyId
+            });
         }
     }
 
