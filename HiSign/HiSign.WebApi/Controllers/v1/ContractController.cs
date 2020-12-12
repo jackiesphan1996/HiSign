@@ -193,6 +193,7 @@ namespace HiSign.WebApi.Controllers.v1
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [Route("get-by-taxcode")]
         public async Task<IActionResult> GetAllContractsByTaxCode(string taxCode)
         {
