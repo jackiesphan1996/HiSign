@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using HiSign.Application.Features.Contract.Commands.CreateNewContract;
 using HiSign.Application.Features.Contract.Queries.GetAllContracts;
 using MediatR;
@@ -8,8 +10,10 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.VariantTypes;
 using GemBox.Document;
 using HiSign.Application.Exceptions;
+using HiSign.Application.Wrappers;
 using HiSign.Domain.Entities;
 using HiSign.Infrastructure.Persistence.Contexts;
 using HiSign.WebApi.Services;
@@ -186,6 +190,35 @@ namespace HiSign.WebApi.Controllers.v1
             {
                 companyId = contract.CompanyId
             });
+        }
+
+        [HttpGet]
+        [Route("get-by-taxcode")]
+        public async Task<IActionResult> GetAllContractsByTaxCode(string taxCode)
+        {
+            var contracts = await _dbContext.Contracts.Where(x => x.Customer.TaxCode == taxCode).ToListAsync();
+
+            var result = contracts.Select(x => new GetAllContractsViewModel
+            {
+                Id = x.Id,
+                ContractName = x.Name,
+                ContractNum = x.ContractNum,
+                ContractPlace = x.ContractPlace,
+                ContractContent = x.Content,
+                ContractTypeId = x.ContractTypeId,
+                ContractExpiredDate = x.ExpiredDate.Value,
+                ContractValue = x.TotalValue,
+                ContractTitle = x.Title,
+                Customer = new CustomerViewModel
+                {
+                    Id = x.CustomerId,
+                    CompanyName = x.Customer.Name
+                },
+                Status = x.Status,
+                FileUrl = x.FileUrl
+            }).ToList();
+
+            return Ok(new Response<List<GetAllContractsViewModel>>(result));
         }
     }
 
