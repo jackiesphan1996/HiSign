@@ -196,7 +196,7 @@ namespace HiSign.WebApi.Controllers.v1
         [Route("get-by-taxcode")]
         public async Task<IActionResult> GetAllContractsByTaxCode(string taxCode)
         {
-            var contracts = await _dbContext.Contracts.Where(x => x.Customer.TaxCode == taxCode).ToListAsync();
+            var contracts = await _dbContext.Contracts.Include(x => x.Customer).Where(x => x.Customer.TaxCode == taxCode).ToListAsync();
 
             var result = contracts.Select(x => new GetAllContractsViewModel
             {
