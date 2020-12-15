@@ -105,6 +105,64 @@ namespace HiSign.WebApi.Controllers
 
             return Ok(data);
         }
+
+        [HttpGet("permission/{userId}")]
+        [Authorize(Roles = "CompanyAdmin,CEO")]
+        public async Task<IActionResult> GetPermissionByUser(string userId)
+        {
+            var userPermissions = _context.Set<UserPermission>().Where(x => x.UserId == userId).ToList();
+
+            var allPermission = _context.Set<Permission>().ToList();
+
+            List<UserPermissionViewModel> data = new List<UserPermissionViewModel>();
+
+            foreach (var permission in allPermission)
+            {
+                var detail = new UserPermissionViewModel()
+                {
+                    UserId = userId,
+                    PermissionId = permission.Id,
+                    PermissionName = permission.Name
+                };
+
+                var userPermission = userPermissions.FirstOrDefault(x => x.PermissionId == permission.Id);
+
+                if (userPermission != null)
+                {
+                    detail.Enabled = userPermission.Enabled;
+                }
+
+                data.Add(detail);
+            }
+
+            return Ok(data);
+        }
+
+        [HttpPut("permission")]
+        [Authorize(Roles = "CompanyAdmin,CEO")]
+        public async Task<IActionResult> UpdatePermission([FromBody] UserPermissionViewModel model)
+        {
+            var userPermission = _context.Set<UserPermission>().FirstOrDefault(x => x.UserId == model.UserId && x.PermissionId == model.PermissionId);
+
+            if (userPermission is null)
+            {
+                userPermission = new UserPermission
+                {
+                    UserId = model.UserId,
+                    PermissionId = model.PermissionId,
+                    Enabled = model.Enabled
+                };
+            }
+            else
+            {
+                userPermission.Enabled = model.Enabled;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
     }
 
     public class UserPermissionViewModel
