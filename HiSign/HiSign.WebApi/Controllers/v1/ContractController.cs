@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading.Tasks;
 using DocumentFormat.OpenXml.VariantTypes;
 using GemBox.Document;
@@ -80,10 +81,21 @@ namespace HiSign.WebApi.Controllers.v1
                 throw new ApiException($"Contract with ID {id} does not exist.");
             }
 
+            var sb = new StringBuilder();
+
+            var content = sb
+                .Append(contract.Header)
+                .Append(contract.AInformation)
+                .Append(contract.BInformation)
+                .Append(contract.ContractValue)
+                .Append(contract.ContractLaw)
+                .Append(contract.Footer)
+                .ToString();
+
             using (MemoryStream mem = new MemoryStream())
             {
                 WordDocument doc = new WordDocument(mem);
-                doc.Process(new HtmlParser(contract.Content));
+                doc.Process(new HtmlParser(content));
                 doc.Save();
 
                 return File(mem.ToArray(), "application/msword", $"{contract.Name}_{contract.Name}.docx");

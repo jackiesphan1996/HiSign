@@ -20,6 +20,12 @@ namespace HiSign.Domain.Entities
         public string Name { get; set; }
         public string ContractNum { get; set; }
         public string FileUrl { get; set; }
+        public string Header { get; set; }
+        public string AInformation { get; set; }
+        public string BInformation { get; set; }
+        public string ContractValue { get; set; }
+        public string ContractLaw { get; set; }
+        public string Footer { get; set; }
     }
 
     public enum ContractStatus

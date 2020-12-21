@@ -20,6 +20,12 @@ namespace HiSign.Application.Features.Contract.Commands.CreateNewContract
         public string ContractContent { get; set; }
         public int ContractTypeId { get; set; }
         public int CustomerId { get; set; }
+        public string Header { get; set; }
+        public string AInformation { get; set; }
+        public string BInformation { get; set; }
+        public string Value { get; set; }
+        public string ContractLaw { get; set; }
+        public string Footer { get; set; }
     }
 
     public class CreateNewContractCommandHanlder : IRequestHandler<CreateNewContractCommand, Response<int>>
@@ -51,7 +57,13 @@ namespace HiSign.Application.Features.Contract.Commands.CreateNewContract
                 Name = request.ContractName,
                 ContractNum = request.ContractNum,
                 Title = request.ContractTitle,
-                CustomerId = request.CustomerId
+                CustomerId = request.CustomerId,
+                Header = request.Header,
+                AInformation = request.AInformation,
+                BInformation = request.BInformation,
+                ContractValue = request.Value,
+                ContractLaw =  request.ContractLaw,
+                Footer =  request.Footer
             };
 
             await _contractRepository.AddAsync(contract);
