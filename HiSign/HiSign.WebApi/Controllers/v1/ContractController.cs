@@ -233,6 +233,41 @@ namespace HiSign.WebApi.Controllers.v1
 
             return Ok(new Response<List<GetAllContractsViewModel>>(result));
         }
+
+        [HttpGet]
+        [Authorize(Roles = "CompanyAdmin,CEO,Secretary")]
+        [Route("{id}")]
+        public async Task<IActionResult> GetDetail(int id)
+        {
+            var contract = await _dbContext.Contracts.Include(x => x.Customer).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (contract == null)
+            {
+                throw new ApiException("Contract does not exist ");
+            }
+
+            var result = new GetAllContractsViewModel
+            {
+                Id = contract.Id,
+                ContractName = contract.Name,
+                ContractNum = contract.ContractNum,
+                ContractPlace = contract.ContractPlace,
+                ContractContent = contract.Content,
+                ContractTypeId = contract.ContractTypeId,
+                ContractExpiredDate = contract.ExpiredDate.Value,
+                ContractValue = contract.TotalValue,
+                ContractTitle = contract.Title,
+                Customer = new CustomerViewModel
+                {
+                    Id = contract.CustomerId,
+                    CompanyName = contract.Customer.Name
+                },
+                Status = contract.Status,
+                FileUrl = contract.FileUrl
+            };
+
+            return Ok(new Response<GetAllContractsViewModel>(result));
+        }
     }
 
     public class SignData
