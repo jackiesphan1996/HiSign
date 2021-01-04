@@ -10,5 +10,15 @@ namespace HiSign.Application.DTOs.Account
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public IList<string> Roles { get; set; }
+        public IList<UserPermissionViewModel> Permissions { get; set; }
+
+    }
+
+    public class UserPermissionViewModel
+    {
+        public string UserId { get; set; }
+        public int PermissionId { get; set; }
+        public string PermissionName { get; set; }
+        public bool Enabled { get; set; }
     }
 }

@@ -309,6 +309,12 @@ namespace HiSign.Infrastructure.Identity.Services
             var employees = await _applicationDbContext.Set<ApplicationUser>().Where(x => x.CompanyId == companyId)
                 .ToListAsync();
 
+            var userPermissions = _applicationDbContext.Set<UserPermission>().Where(x => x.User.CompanyId == companyId).ToList();
+
+            var allPermission = _applicationDbContext.Set<Permission>().ToList();
+
+            
+
             var res = new List<EmployeeResponse>();
 
             foreach (var employee in employees)
@@ -323,6 +329,29 @@ namespace HiSign.Infrastructure.Identity.Services
                 };
 
                 employeeDetail.Roles = await _userManager.GetRolesAsync(employee);
+
+                List<UserPermissionViewModel> data = new List<UserPermissionViewModel>();
+
+                foreach (var permission in allPermission)
+                {
+                    var detail = new UserPermissionViewModel()
+                    {
+                        UserId = employee.Id,
+                        PermissionId = permission.Id,
+                        PermissionName = permission.Name
+                    };
+
+                    var userPermission = userPermissions.FirstOrDefault(x => x.PermissionId == permission.Id && x.UserId == employee.Id);
+
+                    if (userPermission != null)
+                    {
+                        detail.Enabled = userPermission.Enabled;
+                    }
+
+                    data.Add(detail);
+                }
+
+                employeeDetail.Permissions = data;
 
                 res.Add(employeeDetail);
             }
@@ -350,5 +379,7 @@ namespace HiSign.Infrastructure.Identity.Services
             return new Response<bool>(true);
         }
     }
+
+
 
 }

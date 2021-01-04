@@ -164,12 +164,4 @@ namespace HiSign.WebApi.Controllers
         }
 
     }
-
-    public class UserPermissionViewModel
-    {
-        public string UserId { get; set; }
-        public int PermissionId { get; set; }
-        public string PermissionName { get; set; }
-        public bool Enabled { get; set; }
-    }
 }

@@ -263,7 +263,14 @@ namespace HiSign.WebApi.Controllers.v1
                     CompanyName = contract.Customer.Name
                 },
                 Status = contract.Status,
-                FileUrl = contract.FileUrl
+                FileUrl = contract.FileUrl,
+                Header = contract.Header,
+                AInformation = contract.AInformation,
+                BInformation = contract.BInformation,
+                ContractLaw = contract.ContractLaw,
+                Footer = contract.Footer,
+                ContractStringValue = contract.ContractValue,
+                CustomerId = contract.CustomerId
             };
 
             return Ok(new Response<GetAllContractsViewModel>(result));
