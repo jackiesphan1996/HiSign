@@ -31,7 +31,7 @@ namespace HiSign.Domain.Entities
     public enum ContractStatus
     {
         Draft = 0,
-        Open = 1,
-        Completed = 2
+        Waiting = 1,
+        Active = 2
     }
 }

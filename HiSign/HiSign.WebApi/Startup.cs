@@ -1,30 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using HiSign.Application;
 using HiSign.Application.Interfaces;
 using HiSign.Application.Wrappers;
 using HiSign.Domain.Entities;
 using HiSign.Domain.Settings;
-using HiSign.Infrastructure.Identity;
 using HiSign.Infrastructure.Identity.Services;
 using HiSign.Infrastructure.Persistence;
 using HiSign.Infrastructure.Persistence.Contexts;
 using HiSign.Infrastructure.Shared;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using HiSign.WebApi.Extensions;
 using HiSign.WebApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.JsonPatch.Operations;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Text;
 
 namespace HiSign.WebApi
 {

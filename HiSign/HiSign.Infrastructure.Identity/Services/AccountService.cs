@@ -291,6 +291,18 @@ namespace HiSign.Infrastructure.Identity.Services
                     //TODO: Attach Email Service here and configure it via appsettings
                     //await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "mail@codewithmukesh.com", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
                     //return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
+
+                    var permissions = request.Permissions.Select(x => new UserPermission
+                    {
+                        PermissionId = x.PermissionId,
+                        UserId = user.Id,
+                        Enabled = x.Enabled
+                    }).ToList();
+
+                    _applicationDbContext.Set<UserPermission>().AddRange(permissions);
+
+                    _applicationDbContext.SaveChanges();
+
                     return new Response<string>(user.Id);
                 }
                 else
@@ -375,6 +387,19 @@ namespace HiSign.Infrastructure.Identity.Services
             user.Email = request.Email;
 
             await _userManager.UpdateAsync(user);
+
+            var allPermissions = _applicationDbContext.Set<UserPermission>().Where(x => x.UserId == user.Id).ToList();
+
+            foreach (var permission in allPermissions)
+            {
+                var updatedPermission =  request.Permissions.FirstOrDefault(x => x.PermissionId == permission.PermissionId);
+                if (updatedPermission != null)
+                {
+                    permission.Enabled = updatedPermission.Enabled;
+                }
+            }
+
+            _applicationDbContext.SaveChanges();
 
             return new Response<bool>(true);
         }

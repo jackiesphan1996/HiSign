@@ -133,6 +133,15 @@ namespace HiSign.WebApi.Controllers.v1
 
             contract.FileUrl = url;
 
+            if (contract.Status == ContractStatus.Draft)
+            {
+                contract.Status = ContractStatus.Waiting;
+            }
+            else if (contract.Status == ContractStatus.Waiting)
+            {
+                contract.Status = ContractStatus.Active;
+            }
+
             _dbContext.SaveChanges();
 
             return Ok(url);

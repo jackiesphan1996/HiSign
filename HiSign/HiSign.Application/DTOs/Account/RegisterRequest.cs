@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using HiSign.Application.Enums;
 
@@ -59,6 +60,8 @@ namespace HiSign.Application.DTOs.Account
         public string ConfirmPassword { get; set; }
 
         public Roles Role { get; set; }
+
+        public IList<UserPermissionViewModel> Permissions { get; set; }
     }
 
     public class UpdateEmployeeRequest
@@ -78,5 +81,7 @@ namespace HiSign.Application.DTOs.Account
 
         public string PhoneNumber { get; set; }
         public DateTime? DateOfBirth { get; set; }
+
+        public IList<UserPermissionViewModel> Permissions { get; set; }
     }
 }
