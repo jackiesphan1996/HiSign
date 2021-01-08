@@ -28,6 +28,26 @@ namespace HiSign.Application.Features.Contract.Commands.CreateNewContract
         public string Footer { get; set; }
     }
 
+    public class UpdateNewContractCommand : IRequest<Response<int>>
+    {
+        public string ContractTitle { get; set; }
+        public string ContractNum { get; set; }
+        public string ContractName { get; set; }
+        public string ContractPlace { get; set; }
+        public DateTime ContractExpiredDate { get; set; }
+        public decimal ContractValue { get; set; }
+        public string ContractContent { get; set; }
+        public int ContractTypeId { get; set; }
+        public int CustomerId { get; set; }
+        public string Header { get; set; }
+        public string AInformation { get; set; }
+        public string BInformation { get; set; }
+        public string Value { get; set; }
+        public string ContractLaw { get; set; }
+        public string Footer { get; set; }
+        public ContractStatus Status { get; set; }
+    }
+
     public class CreateNewContractCommandHanlder : IRequestHandler<CreateNewContractCommand, Response<int>>
     {
         private readonly IContractRepository _contractRepository;

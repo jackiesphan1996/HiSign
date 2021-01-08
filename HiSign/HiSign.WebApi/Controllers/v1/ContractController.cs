@@ -284,6 +284,56 @@ namespace HiSign.WebApi.Controllers.v1
 
             return Ok(new Response<GetAllContractsViewModel>(result));
         }
+
+        [HttpPut]
+        [Authorize(Roles = "CompanyAdmin,CEO,Secretary")]
+        [Route("{id}")]
+        public async Task<IActionResult> Put(int id, UpdateNewContractCommand command)
+        {
+            var contract = await _dbContext.Contracts.SingleOrDefaultAsync(x => x.Id == id);
+            if (contract == null)
+            {
+                throw new ApiException("Id does not exist.");
+            }
+
+            contract.ExpiredDate = command.ContractExpiredDate;
+            contract.Status = command.Status;
+            contract.TotalValue = command.ContractValue;
+            contract.ContractPlace = command.ContractPlace;
+            contract.Content = command.ContractContent;
+            contract.Name = command.ContractName;
+            contract.ContractNum = command.ContractNum;
+            contract.Title = command.ContractTitle;
+            contract.CustomerId = command.CustomerId;
+            contract.Header = command.Header;
+            contract.AInformation = command.AInformation;
+            contract.BInformation = command.BInformation;
+            contract.ContractValue = command.Value;
+            contract.ContractLaw = command.ContractLaw;
+            contract.Footer = command.Footer;
+
+            _dbContext.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "CompanyAdmin,CEO,Secretary")]
+        [Route("{id}/note")]
+        public async Task<IActionResult> PutNote(int id, string note)
+        {
+            var contract = await _dbContext.Contracts.SingleOrDefaultAsync(x => x.Id == id);
+            if (contract == null)
+            {
+                throw new ApiException("Id does not exist.");
+            }
+
+            contract.Note = note;
+
+            _dbContext.SaveChanges();
+
+            return Ok();
+        }
     }
 
     public class SignData

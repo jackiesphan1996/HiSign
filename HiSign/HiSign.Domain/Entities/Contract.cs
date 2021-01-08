@@ -26,6 +26,7 @@ namespace HiSign.Domain.Entities
         public string ContractValue { get; set; }
         public string ContractLaw { get; set; }
         public string Footer { get; set; }
+        public string Note { get; set; }
     }
 
     public enum ContractStatus
