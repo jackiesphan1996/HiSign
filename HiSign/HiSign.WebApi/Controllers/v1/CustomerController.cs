@@ -49,7 +49,7 @@ namespace HiSign.WebApi.Controllers.v1
             return Ok(await _mediator.Send(command));
         }
 
-        [HttpPut]
+        [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
