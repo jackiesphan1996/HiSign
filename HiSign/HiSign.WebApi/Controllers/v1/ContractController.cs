@@ -279,7 +279,9 @@ namespace HiSign.WebApi.Controllers.v1
                 ContractLaw = contract.ContractLaw,
                 Footer = contract.Footer,
                 ContractStringValue = contract.ContractValue,
-                CustomerId = contract.CustomerId
+                CustomerId = contract.CustomerId,
+                IsMainContract = !contract.BelongToContractId.HasValue,
+                BelongToContractId = contract.BelongToContractId
             };
 
             return Ok(new Response<GetAllContractsViewModel>(result));

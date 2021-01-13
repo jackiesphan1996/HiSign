@@ -11,6 +11,11 @@ namespace HiSign.Infrastructure.Persistence.Configurations
             builder.ToTable(nameof(Contract));
             builder.HasOne(x => x.Customer).WithMany(x => x.Contracts).HasForeignKey(x => x.CustomerId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder
+                .HasOne(x => x.Parent)
+                .WithMany(x => x.Children)
+                .HasForeignKey(x => x.BelongToContractId);
         }
     }
 }

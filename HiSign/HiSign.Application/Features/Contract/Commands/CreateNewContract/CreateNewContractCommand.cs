@@ -26,7 +26,10 @@ namespace HiSign.Application.Features.Contract.Commands.CreateNewContract
         public string Value { get; set; }
         public string ContractLaw { get; set; }
         public string Footer { get; set; }
+        public bool IsMainContract { get; set; }
+        public int? BelongToContractId { get; }
     }
+
 
     public class UpdateNewContractCommand : IRequest<Response<int>>
     {
@@ -83,7 +86,8 @@ namespace HiSign.Application.Features.Contract.Commands.CreateNewContract
                 BInformation = request.BInformation,
                 ContractValue = request.Value,
                 ContractLaw =  request.ContractLaw,
-                Footer =  request.Footer
+                Footer =  request.Footer,
+                BelongToContractId = request.BelongToContractId
             };
 
             await _contractRepository.AddAsync(contract);

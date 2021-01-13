@@ -1,5 +1,7 @@
 ﻿using HiSign.Domain.Common;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace HiSign.Domain.Entities
 {
@@ -27,6 +29,9 @@ namespace HiSign.Domain.Entities
         public string ContractLaw { get; set; }
         public string Footer { get; set; }
         public string Note { get; set; }
+        public int? BelongToContractId { get; set; }
+        public virtual Contract Parent { get; set; }
+        public virtual ICollection<Contract> Children { get; set; }
     }
 
     public enum ContractStatus

@@ -33,6 +33,8 @@ namespace HiSign.Application.Features.Contract.Queries.GetAllContracts
         public string ContractStringValue { get; set; }
         public string ContractLaw { get; set; }
         public string Footer { get; set; }
+        public bool IsMainContract { get; set; }
+        public int? BelongToContractId { get; set; }
     }
 
     public class CustomerViewModel
@@ -43,6 +45,8 @@ namespace HiSign.Application.Features.Contract.Queries.GetAllContracts
 
     public class GetAllContracsQuery : IRequest<Response<List<GetAllContractsViewModel>>>
     {
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
     }
 
     public class GetAllContracsQueryHandler : IRequestHandler<GetAllContracsQuery, Response<List<GetAllContractsViewModel>>>
@@ -64,6 +68,16 @@ namespace HiSign.Application.Features.Contract.Queries.GetAllContracts
             var currentUser = await _authenticatedUserService.GetCurentApplicationUser();
 
             var contracts = _contractRepository.GetAllContracts(currentUser.CompanyId.Value);
+
+            if (request.FromDate.HasValue)
+            {
+                contracts = contracts.Where(x => x.Created >= request.FromDate.Value).ToList();
+            }
+
+            if (request.ToDate.HasValue)
+            {
+                contracts = contracts.Where(x => x.Created <= request.ToDate.Value.Date).ToList();
+            }
 
             var result = contracts.Select(x => new GetAllContractsViewModel
             {
@@ -89,7 +103,9 @@ namespace HiSign.Application.Features.Contract.Queries.GetAllContracts
                 ContractLaw = x.ContractLaw,
                 Footer = x.Footer,
                 ContractStringValue = x.ContractValue,
-                CustomerId = x.CustomerId
+                CustomerId = x.CustomerId,
+                IsMainContract = !x.BelongToContractId.HasValue,
+                BelongToContractId = x.BelongToContractId
             }).ToList();
 
             return new Response<List<GetAllContractsViewModel>>(result);
