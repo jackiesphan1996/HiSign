@@ -32,6 +32,7 @@ namespace HiSign.Domain.Entities
         public int? BelongToContractId { get; set; }
         public virtual Contract Parent { get; set; }
         public virtual ICollection<Contract> Children { get; set; }
+        public DateTime? ActivedDate { get; set; }
     }
 
     public enum ContractStatus

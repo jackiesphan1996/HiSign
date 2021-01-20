@@ -140,6 +140,7 @@ namespace HiSign.WebApi.Controllers.v1
             else if (contract.Status == ContractStatus.Waiting)
             {
                 contract.Status = ContractStatus.Active;
+                contract.ActivedDate = DateTime.UtcNow.AddHours(7);
             }
 
             _dbContext.SaveChanges();

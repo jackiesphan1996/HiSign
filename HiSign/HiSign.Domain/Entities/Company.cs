@@ -17,5 +17,6 @@ namespace HiSign.Domain.Entities
         public virtual ICollection<Contract> Contracts { get; set; }
         public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }
         public virtual ICollection<Customer> Customers { get; set; }
+        public virtual ICollection<DigitalSignature> DigitalSignatures { get; set; }
     }
 }
