@@ -84,5 +84,24 @@ namespace HiSign.WebApi.Controllers.v1
 
             return Ok(new Response<CompanyViewModel>(result));
         }
+
+        [HttpPut]
+        [Authorize(Roles = "SuperAdmin")]
+        [Route("{id}/change-status")]
+        public async Task<IActionResult> ChangeStatus([FromRoute] int id, [FromBody] UpdateyStatus status)
+        {
+            var company = await _dbContext.Companies.SingleOrDefaultAsync(x => x.Id == id);
+
+            if (company == null)
+            {
+                throw new ApiException("Id does not exist.");
+            }
+
+            company.Status = status.Status;
+
+            _dbContext.SaveChanges();
+
+            return Ok();
+        }
     }
 }

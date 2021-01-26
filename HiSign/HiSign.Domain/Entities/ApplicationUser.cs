@@ -17,5 +17,6 @@ namespace HiSign.Domain.Entities
         {
             return this.RefreshTokens?.Find(x => x.Token == token) != null;
         }
+        public Status Status { get; set; }
     }
 }

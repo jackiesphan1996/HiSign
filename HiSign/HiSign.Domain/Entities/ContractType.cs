@@ -10,5 +10,6 @@ namespace HiSign.Domain.Entities
         public string Content { get; set; }
         public Company Company { get; set; }
         public virtual ICollection<Contract> Contracts { get; set; }
+        public Status Status { get; set; }
     }
 }

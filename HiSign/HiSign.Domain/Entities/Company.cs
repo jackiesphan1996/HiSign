@@ -13,10 +13,17 @@ namespace HiSign.Domain.Entities
         public string BankAccount { get; set; }
         public string BusinessLicense { get; set; }
         public string Representaive { get; set; }
+        public Status Status { get; set; }
         public virtual ICollection<ContractType> ContractTypes { get; set; }
         public virtual ICollection<Contract> Contracts { get; set; }
         public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }
         public virtual ICollection<Customer> Customers { get; set; }
         public virtual ICollection<DigitalSignature> DigitalSignatures { get; set; }
+    }
+
+    public enum Status
+    {
+        Active = 0,
+        InActive = 1
     }
 }

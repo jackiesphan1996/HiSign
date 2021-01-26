@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using HiSign.Application.Exceptions;
+using HiSign.Application.Features.Company.Commands.UpdateCompanyByCompany;
 using HiSign.Application.Wrappers;
 using HiSign.Domain.Entities;
 using HiSign.Infrastructure.Persistence.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace HiSign.WebApi.Controllers.v1
 {
@@ -74,6 +76,25 @@ namespace HiSign.WebApi.Controllers.v1
             };
 
             return Ok(new Response<GetAllCustomerViewModel>(result));
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "CompanyAdmin,CEO")]
+        [Route("{id}/change-status")]
+        public async Task<IActionResult> ChangeStatus([FromRoute] int id, [FromBody] UpdateyStatus status)
+        {
+            var company = await _context.Set<Customer>().SingleOrDefaultAsync(x => x.Id == id);
+
+            if (company == null)
+            {
+                throw new ApiException("Id does not exist.");
+            }
+
+            company.Status = status.Status;
+
+            _context.SaveChanges();
+
+            return Ok();
         }
     }
 }

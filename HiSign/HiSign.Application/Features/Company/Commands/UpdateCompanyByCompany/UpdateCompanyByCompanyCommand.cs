@@ -4,6 +4,7 @@ using HiSign.Application.Exceptions;
 using HiSign.Application.Interfaces;
 using HiSign.Application.Interfaces.Repositories;
 using HiSign.Application.Wrappers;
+using HiSign.Domain.Entities;
 using MediatR;
 
 namespace HiSign.Application.Features.Company.Commands.UpdateCompanyByCompany
@@ -19,6 +20,11 @@ namespace HiSign.Application.Features.Company.Commands.UpdateCompanyByCompany
         public string BankAccount { get; set; }
         public string BusinessLicense { get; set; }
         public string Representaive { get; set; }
+    }
+
+    public class UpdateyStatus
+    {
+        public Status Status { get; set; }
     }
 
     public class UpdateCompanyByCompanyCommandHandler : IRequestHandler<UpdateCompanyByCompanyCommand, Response<bool>>

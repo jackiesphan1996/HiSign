@@ -17,5 +17,6 @@ namespace HiSign.Domain.Entities
         public string Representaive { get; set; }
         public virtual Company BelongToCompany { get; set; }
         public virtual ICollection<Contract> Contracts { get; set; }
+        public Status Status { get; set; }
     }
 }
