@@ -47,4 +47,10 @@
     <ProjectReference Include="..\HiSign.Infrastructure.Shared\HiSign.Infrastructure.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="HiSign.WebApi.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

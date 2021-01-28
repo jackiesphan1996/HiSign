@@ -64,7 +64,7 @@ namespace HiSign.WebApi
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseDeveloperExceptionPage();
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
